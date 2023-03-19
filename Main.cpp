@@ -105,11 +105,10 @@ template<class T> inline void ers(T& a) { srt(a); a.erase(unique(all(a)), a.end(
 // xoroshiro128++
 struct xoroshiro128pp {
 	vector<uint64_t> xoro_seed;
-	//xoroshiro128pp(const uint64_t s0 = 123456789,const uint64_t s1 = 362436069) : seed0(s0),seed1(s1){}
 	inline void set_seed(const uint64_t s0, const uint64_t s1) {
 		if (len(xoro_seed) == 0) {
-			xoro_seed.pb(s0);
-			xoro_seed.pb(s1);
+			xoro_seed.push_back(s0);
+			xoro_seed.push_back(s1);
 		}
 		else {
 			xoro_seed[0] = s0;
@@ -124,8 +123,8 @@ struct xoroshiro128pp {
 		uint64_t s1 = xoro_seed[1];
 		const uint64_t result = rotl(s0 + s1, 17) + s0;
 		s1 ^= s0;
-		xoro_seed[0] = rotl(s0, 49) ^ s1 ^ (s1 << 21); // a, b
-		xoro_seed[1] = rotl(s1, 28); // c
+		xoro_seed[0] = rotl(s0, 49) ^ s1 ^ (s1 << 21);
+		xoro_seed[1] = rotl(s1, 28);
 		return result;
 	}
 	template<class T, class U> inline int64 rand(T a, U b) {
@@ -138,8 +137,8 @@ struct ahc015 {
 	vi f;
 
 	void f_input(const vi a) {
-		if (len(f) == 0)repin(i, a)f.pb(i);
-		else rep(i, 100)f[i] = a[i];
+		if (f.size() == 0)for (auto&& i : (a))f.push_back(i);
+		else for(int i=0;i<100;i++)f[i] = a[i];
 	}
 
 	char operations(int p, int count) {
@@ -167,7 +166,7 @@ void Main()
 	int count = 200;
 	double spawnTime = 0.0;
 	double accumulator = 0.0;
-	vi a(100);
+	vector<int> a(100);
 	const Font font{ 30 };
 	ll score = 0;
 
@@ -237,9 +236,9 @@ void Main()
 			}
 			else {
 				if (operation[count / 2] == 'F') {
-					rep(k, 10) {
+					for(int k=0;k<10;k++) {
 						int idx = 0;
-						rep(j, 10) {
+						for(int j=0;j<10;j++) {
 							if (grid[j][k] > 0) {
 								swap(grid[j][k], grid[idx][k]);
 								idx++;
@@ -248,9 +247,9 @@ void Main()
 					}
 				}
 				else if (operation[count / 2] == 'B') {
-					rep(k, 10) {
+					for(int k=0;k<10;k++) {
 						int idx = 9;
-						repr(j, 10) {
+						for(int j=9;j>=0;j--) {
 							if (grid[j][k] > 0) {
 								swap(grid[j][k], grid[idx][k]);
 								idx--;
@@ -259,9 +258,9 @@ void Main()
 					}
 				}
 				else if (operation[count / 2] == 'L') {
-					rep(j, 10) {
+					for(int j=0;j<10;j++) {
 						int idx = 0;
-						rep(k, 10) {
+						for(int k=0;k<10;k++) {
 							if (grid[j][k] > 0) {
 								swap(grid[j][k], grid[j][idx]);
 								idx++;
@@ -270,9 +269,9 @@ void Main()
 					}
 				}
 				else if (operation[count / 2] == 'R') {
-					rep(j, 10) {
+					for(int j=0;j<10;j++) {
 						int idx = 9;
-						repr(k, 10) {
+						for(int k=9;k>=0;k--) {
 							if (grid[j][k] > 0) {
 								swap(grid[j][k], grid[j][idx]);
 								idx--;
@@ -284,20 +283,20 @@ void Main()
 			if (count == 199) {
 				score = 0;
 				int connected_component = 0;
-				vvi c(10, vi(10));
-				vl candy_count(4);
-				rep(i, 10)rep(j, 10) {
+				vector<vector<int>> c(10, vector<int>(10));
+				vector<long long> candy_count(4);
+				for(int i=0;i<10;i++)for(int j=0;j<10;j++) {
 					candy_count[grid[i][j]]++;
 					if (c[i][j] > 0)continue;
 					set<pair<int, int>> s;
 					s.insert(make_pair(i, j));
-					while (len(s) > 0) {
+					while (s.size() > 0) {
 						int y = (*begin(s)).first, x = (*begin(s)).second;
 						s.erase(*begin(s));
 						c[y][x] = 1;
 						connected_component++;
-						vvi root = { {1,0},{0,1},{-1,0},{0,-1} };
-						repin(k, root) {
+						vector<vector<int>> root = { {1,0},{0,1},{-1,0},{0,-1} };
+						for (auto&& k : (root)) {
 							if (y + k[0] >= 0 && y + k[0] < 10 && x + k[1] >= 0 && x + k[1] < 10 && grid[y + k[0]][x + k[1]] == grid[y][x] && c[y + k[0]][x + k[1]] == 0) {
 								s.insert(make_pair(y + k[0], x + k[1]));
 							}
@@ -306,7 +305,7 @@ void Main()
 					score += connected_component * connected_component;
 					connected_component = 0;
 				}
-				repi(i, 1, 4)candy_count[0] += candy_count[i] * candy_count[i];
+				for(int i=1;i<4;i++)candy_count[0] += candy_count[i] * candy_count[i];
 				score = score * 1000000 / candy_count[0];
 			}
 			count++;
