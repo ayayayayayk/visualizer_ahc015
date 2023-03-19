@@ -2,7 +2,7 @@
 using namespace std;
 
 // xoroshiro128++
-// this struct is a new pseudorandom number generator.
+// this struct is a pseudorandom number generator.
 struct xoroshiro128pp {
 	vector<uint64_t> xoro_seed;
 	inline void set_seed(const uint64_t s0, const uint64_t s1) {
