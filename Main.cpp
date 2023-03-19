@@ -1,112 +1,11 @@
 ﻿# include <Siv3D.hpp>
-
 using namespace std;
-using ll = long long;
-using ld = long double;
-using unit = unsigned int;
-using ull = unsigned long long;
-using vl = vector<ll>;
-using vvl = vector<vl>;
-using vi = vector<int>;
-using vvi = vector<vi>;
-using vb = vector<bool>;
-using vvb = vector<vb>;
-using vd = vector<ld>;
-using vvd = vector<vd>;
-using vc = vector<char>;
-using vvc = vector<vc>;
-using str = string;
-using vs = vector<str>;
-using vvs = vector<vs>;
-using pii = pair<int, int>;
-using vpii = vector<pii>;
-using pll = pair<ll, ll>;
-using vpll = vector<pll>;
-using psl = pair<str, ll>;
-using vpsl = vector<psl>;
-using pls = pair<ll, str>;
-using vpls = vector<pls>;
-using psi = pair<str, int>;
-using vpsi = vector<psi>;
-using pis = pair<int, str>;
-using vpis = vector<pis>;
-using tiii = tuple<int, int, int>;
-using tiil = tuple<int, int, ll>;
-using tili = tuple<int, ll, int>;
-using tlii = tuple<ll, int, int>;
-using till = tuple<int, ll, ll>;
-using tlil = tuple<ll, int, ll>;
-using tlli = tuple<ll, ll, int>;
-using tiis = tuple<int, int, str>;
-using tisi = tuple<int, str, int>;
-using tsii = tuple<str, int, int>;
-using tiss = tuple<int, str, str>;
-using tsis = tuple<str, int, str>;
-using tssi = tuple<str, str, int>;
-using tlll = tuple<ll, ll, ll>;
-using tsss = tuple<str, str, str>;
-using tssl = tuple<str, str, ll>;
-using tsls = tuple<str, ll, str>;
-using tlss = tuple<ll, str, str>;
-using tsll = tuple<str, ll, ll>;
-using tlsl = tuple<ll, str, ll>;
-using tlls = tuple<ll, ll, str>;
-using tils = tuple<int, ll, str>;
-using tisl = tuple<int, str, ll>;
-using tlis = tuple<ll, int, str>;
-using tsil = tuple<str, int, ll>;
-using tlsi = tuple<ll, str, int>;
-using tsli = tuple<str, ll, int>;
-const ll INF = (ll)9223372036854775807;
-const int IINF = (int)2147483647;
-const ld PI = acos((ld)-1);
-const str yes = "Yes";
-const str no = "No";
-const ld EPS = 1E-12;
-#define all(v) v.begin(), v.end()
-#define rall(v) v.rbegin(), v.rend()
-#define rep(i, n) for (int i = 0; i < (int)(n); i++)
-#define rep1(i, n) for (int i = 1; i <= (int)(n); i++)
-#define repi(j, i, n) for (int j = i; j < (int)(n); j++)
-#define repr(i, n) for (int i = (int)(n-1); i >= 0; i--)
-#define repin(e, a) for (auto&& e: (a))
-#define pb push_back
-#define prt(a) cout << a << endl
-#define mp make_pair
-#define mt make_tuple
-#define fi first
-#define se second
-#define str(s) to_string(s)
-template<class T> ld lg(const T& a, const T& b) { return log(a) / log(b); }
-template <class T, class U> ll count(T& a, U b) { ll x = 0; repin(i, a)if (i == b)x += 1; return x; }
-inline str toUpper(str s) {
-	transform(s.cbegin(), s.cend(), s.begin(), ::toupper);
-	return s;
-}
-inline str toLower(str s) {
-	transform(s.cbegin(), s.cend(), s.begin(), ::tolower);
-	return s;
-}
-
-// vector
-#define srt(a) sort(all(a))
-#define srtr(a) sort(rall(a))
-#define len(a) (ll)(a).size()
-template<class T> inline void print(const T& a) { ll x = len(a); rep(i, x) x > 1 ? i < x - 1 ? i>0 ? cout << " " << a[i] : cout << a[i] : cout << " " << a[i] << endl : prt(a[i]); }
-template<class T> inline void scan(T& a) { ll x = len(a); rep(i, x) cin >> a[i]; }
-template<class T>inline void vec_sortl(vector<T>& s) { sort(all(s), [](T& x, T& y) { return len(x) < len(y); }); }
-template<class T> inline ll vec_max(T& a) { return *max_element(all(a)); }
-template<class T> inline ll vec_min(T& a) { return *min_element(all(a)); }
-template<class T> inline ll vec_sum(T& a) { ll x = 0; repin(i, a) x += i; return x; }
-template<class T, class U> inline ll lbd(T& a, U x) { ll y; len(a) > 0 ? y = lower_bound(all(a), x) - a.begin() : y = -1; return y; }
-template<class T, class U> inline ll ubd(T& a, U x) { ll y; len(a) > 0 ? y = upper_bound(all(a), x) - a.begin() : y = -1; return y; }
-template<class T> inline void ers(T& a) { srt(a); a.erase(unique(all(a)), a.end()); }
 
 // xoroshiro128++
 struct xoroshiro128pp {
 	vector<uint64_t> xoro_seed;
 	inline void set_seed(const uint64_t s0, const uint64_t s1) {
-		if (len(xoro_seed) == 0) {
+		if (xoro_seed.size() == 0) {
 			xoro_seed.push_back(s0);
 			xoro_seed.push_back(s1);
 		}
@@ -134,16 +33,16 @@ struct xoroshiro128pp {
 };
 
 struct ahc015 {
-	vi f;
+	vector<int> f;
 
-	void f_input(const vi a) {
+	void f_input(const vector<int> a) {
 		if (f.size() == 0)for (auto&& i : (a))f.push_back(i);
 		else for(int i=0;i<100;i++)f[i] = a[i];
 	}
 
 	char operations(int p, int count) {
 		if (count == 99)return 'X';
-		ll x = f[count], y = f[count + 1];
+		int x = f[count], y = f[count + 1];
 		if (y == 1)return 'F';
 		else if (x == 1) return 'B';
 		else if (y == 2) return 'L';
@@ -168,7 +67,7 @@ void Main()
 	double accumulator = 0.0;
 	vector<int> a(100);
 	const Font font{ 30 };
-	ll score = 0;
+	long long score = 0;
 
 	// the system will continue to run until U close the window.
 	while (System::Update()) {
