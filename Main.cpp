@@ -2,6 +2,7 @@
 using namespace std;
 
 // xoroshiro128++
+// this struct is a new pseudorandom number generator.
 struct xoroshiro128pp {
 	vector<uint64_t> xoro_seed;
 	inline void set_seed(const uint64_t s0, const uint64_t s1) {
@@ -32,6 +33,7 @@ struct xoroshiro128pp {
 	}
 };
 
+// this struct is my solution for AHC015.
 struct ahc015 {
 	vector<int> f;
 
@@ -54,12 +56,15 @@ void Main()
 {
 
 	TextEditState seed;
-	const Array<int32> candy = { 1,2,3 };
+	// my solution output
 	vector<char> operation(100);
 	ahc015 solution;
 	xoroshiro128pp xoro;
+	// grid
 	Grid<int> grid(10, 10, 0);
+	// colors
 	vector<ColorF> colors = { Palette::White ,{Palette::Green,0.2} ,{Palette::Blue,0.2} ,{Palette::Red,0.2} };
+	// icons
 	Texture candy_tex{ U"🍬"_emoji }, choco_tex{ U"🍫"_emoji }, lolli_tex{ U"🍭"_emoji };
 	vector<Texture> texture = { candy_tex,choco_tex,lolli_tex };
 	int count = 200;
@@ -67,10 +72,12 @@ void Main()
 	double accumulator = 0.0;
 	vector<int> a(100);
 	const Font font{ 30 };
+	// my score
 	long long score = 0;
 
 	// the system will continue to run until U close the window.
 	while (System::Update()) {
+		// draw grid
 		for (auto y : step(grid.height()))
 		{
 			for (auto x : step(grid.width()))
@@ -83,9 +90,11 @@ void Main()
 
 			}
 		}
+		// draw text
 		font(U"seed").draw(Vec2{ 560,50 }, Palette::White);
 		font(U"score:", score).draw(Vec2{ 560,250 }, Palette::White);
 
+		// if U change the xoro seed
 		if (SimpleGUI::TextBox(seed, Vec2{ 560, 100 }) && seed.text.narrow().size() > 0) {
 			count = 0;
 			spawnTime = 0.0;
@@ -98,6 +107,8 @@ void Main()
 				}
 			}
 		}
+
+		// if U press the repeat button
 		if (SimpleGUI::Button(U"Repeat", Vec2{ 560, 150 }) && seed.text.narrow().size() > 0) {
 			count = 0;
 			for (auto y : step(grid.height()))
@@ -108,8 +119,11 @@ void Main()
 				}
 			}
 		}
+		// speed bar
 		SimpleGUI::Slider(U"Speed", spawnTime, 0, 1, Vec2{ 560, 200 });
 		accumulator += Scene::DeltaTime();
+
+		// play my solution
 		if (count<200 && accumulator>spawnTime) {
 			accumulator = 0;
 			if (count == 0) {
@@ -179,6 +193,8 @@ void Main()
 					}
 				}
 			}
+
+			// calculate my score
 			if (count == 199) {
 				score = 0;
 				int connected_component = 0;
@@ -189,6 +205,8 @@ void Main()
 					if (c[i][j] > 0)continue;
 					set<pair<int, int>> s;
 					s.insert(make_pair(i, j));
+
+					// bfs
 					while (s.size() > 0) {
 						int y = (*begin(s)).first, x = (*begin(s)).second;
 						s.erase(*begin(s));
